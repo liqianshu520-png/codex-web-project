@@ -1,0 +1,126 @@
+<!DOCTYPE html>
+<html lang="zh-CN">
+  <head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title><%= site.hero.title %></title>
+    <meta
+      name="description"
+      content="<%= site.hero.subtitle %>"
+    >
+    <link rel="stylesheet" href="/styles.css">
+  </head>
+  <body>
+    <div class="page-shell">
+      <header class="hero hero-art">
+        <nav class="topbar">
+          <div class="brand">
+            <span class="brand-mark">火</span>
+            <span><%= site.hero.eyebrow %></span>
+          </div>
+          <div class="nav-links">
+            <% site.sections.forEach((section) => { %>
+              <a href="#<%= section.id %>"><%= section.title %></a>
+            <% }) %>
+            <a href="#contact">联系我</a>
+          </div>
+        </nav>
+
+        <div class="hero-grid">
+          <section class="hero-copy ink-border">
+            <p class="eyebrow">疾风感原创视觉</p>
+            <h1><%= site.hero.title %></h1>
+            <p class="lede"><%= site.hero.subtitle %></p>
+            <div class="hero-actions">
+              <a class="button primary" href="#projects">进入任务区</a>
+              <a class="button secondary" href="#contact">投递留言</a>
+            </div>
+          </section>
+
+          <aside class="hero-card panel ink-border">
+            <p class="hero-card-title">忍录面板</p>
+            <div class="chakra-ring"></div>
+            <ul class="stat-list">
+              <% site.stats.forEach((stat) => { %>
+                <li>
+                  <span><%= stat.label %></span>
+                  <strong><%= stat.value %></strong>
+                </li>
+              <% }) %>
+            </ul>
+          </aside>
+        </div>
+      </header>
+
+      <main>
+        <section class="timeline panel ink-border">
+          <div class="section-head">
+            <p class="kicker">成长路径</p>
+            <h2>站点进化路线</h2>
+          </div>
+          <div class="timeline-grid">
+            <% site.timeline.forEach((item) => { %>
+              <article class="timeline-item">
+                <span class="timeline-year"><%= item.year %></span>
+                <h3><%= item.title %></h3>
+                <p><%= item.text %></p>
+              </article>
+            <% }) %>
+          </div>
+        </section>
+
+        <% site.sections.forEach((section, index) => { %>
+          <section id="<%= section.id %>" class="content-block">
+            <div class="section-head">
+              <p class="kicker"><%= section.kicker %></p>
+              <h2><%= section.title %></h2>
+              <p class="section-copy"><%= section.description %></p>
+            </div>
+
+            <div class="card-grid <%= index % 2 === 0 ? 'warm' : 'cool' %>">
+              <% section.items.forEach((item) => { %>
+                <article class="feature-card panel ink-border">
+                  <p class="card-meta"><%= item.meta %></p>
+                  <h3><%= item.name %></h3>
+                  <p><%= item.summary %></p>
+                  <a href="#contact" class="card-link">准备填充真实内容</a>
+                </article>
+              <% }) %>
+            </div>
+          </section>
+        <% }) %>
+
+        <section id="contact" class="contact-wrap panel ink-border">
+          <div class="section-head">
+            <p class="kicker">联络卷轴</p>
+            <h2>给我留言</h2>
+            <p class="section-copy">这里是动态功能入口。表单提交后，留言会保存到服务器本地文件。</p>
+          </div>
+
+          <% if (submitted) { %>
+            <div class="notice">留言已送达，服务器已经记录你的消息。</div>
+          <% } %>
+
+          <form class="contact-form" method="post" action="/contact">
+            <label>
+              <span>名字</span>
+              <input type="text" name="name" placeholder="怎么称呼你" required>
+            </label>
+
+            <label>
+              <span>邮箱</span>
+              <input type="email" name="email" placeholder="your@email.com" required>
+            </label>
+
+            <label class="full">
+              <span>留言内容</span>
+              <textarea name="message" rows="6" placeholder="想合作、交流测试项目或聊聊创作，都可以写在这里。" required></textarea>
+            </label>
+
+            <button class="button primary" type="submit">发出卷轴</button>
+          </form>
+        </section>
+      </main>
+    </div>
+  </body>
+  </html>

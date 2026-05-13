@@ -1,0 +1,14 @@
+{
+  "name": "lqs-personal-site",
+  "version": "1.0.0",
+  "description": "Dynamic personal website for projects, novels, and developer tools.",
+  "main": "server.js",
+  "scripts": {
+    "start": "node server.js",
+    "dev": "node --watch server.js"
+  },
+  "dependencies": {
+    "ejs": "^3.1.10",
+    "express": "^4.19.2"
+  }
+}
