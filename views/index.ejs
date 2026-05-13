@@ -3,102 +3,99 @@
   <head>
     <meta charset="UTF-8">
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
-    <title><%= site.hero.title %></title>
-    <meta
-      name="description"
-      content="<%= site.hero.subtitle %>"
-    >
+    <title><%= novel.title %> - LQS Home</title>
+    <meta name="description" content="<%= novel.description %>">
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body>
-    <div class="page-shell">
-      <header class="hero hero-art">
-        <nav class="topbar">
-          <div class="brand">
-            <span class="brand-mark">火</span>
-            <span><%= site.hero.eyebrow %></span>
-          </div>
-          <div class="nav-links">
-            <% site.sections.forEach((section) => { %>
-              <a href="#<%= section.id %>"><%= section.title %></a>
-            <% }) %>
-            <a href="#contact">联系我</a>
-          </div>
+    <div class="site-shell">
+      <header class="topbar">
+        <a class="brand" href="/">
+          <span class="brand-mark">渊</span>
+          <span>LQS Home</span>
+        </a>
+        <nav class="nav-links" aria-label="主导航">
+          <a href="#novel">小说</a>
+          <% site.sections.forEach((section) => { %>
+            <a href="#<%= section.id %>"><%= section.title %></a>
+          <% }) %>
+          <a href="#contact">联系</a>
         </nav>
-
-        <div class="hero-grid">
-          <section class="hero-copy ink-border">
-            <p class="eyebrow">疾风感原创视觉</p>
-            <h1><%= site.hero.title %></h1>
-            <p class="lede"><%= site.hero.subtitle %></p>
-            <div class="hero-actions">
-              <a class="button primary" href="#projects">进入任务区</a>
-              <a class="button secondary" href="#contact">投递留言</a>
-            </div>
-          </section>
-
-          <aside class="hero-card panel ink-border">
-            <p class="hero-card-title">忍录面板</p>
-            <div class="chakra-ring"></div>
-            <ul class="stat-list">
-              <% site.stats.forEach((stat) => { %>
-                <li>
-                  <span><%= stat.label %></span>
-                  <strong><%= stat.value %></strong>
-                </li>
-              <% }) %>
-            </ul>
-          </aside>
-        </div>
       </header>
 
       <main>
-        <section class="timeline panel ink-border">
-          <div class="section-head">
-            <p class="kicker">成长路径</p>
-            <h2>站点进化路线</h2>
+        <section id="novel" class="novel-hero">
+          <div class="book-cover-wrap">
+            <a class="book-cover-link" href="<%= novel.firstChapterUrl %>" aria-label="开始阅读《<%= novel.title %>》">
+              <img class="book-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
+            </a>
           </div>
-          <div class="timeline-grid">
-            <% site.timeline.forEach((item) => { %>
-              <article class="timeline-item">
-                <span class="timeline-year"><%= item.year %></span>
-                <h3><%= item.title %></h3>
-                <p><%= item.text %></p>
-              </article>
+
+          <div class="novel-intro">
+            <p class="eyebrow"><%= site.hero.eyebrow %></p>
+            <h1><%= novel.title %></h1>
+            <p class="tagline"><%= novel.tagline %></p>
+            <p class="intro-copy"><%= novel.description %></p>
+
+            <div class="novel-meta" aria-label="小说信息">
+              <span><%= novel.genre %></span>
+              <span><%= novel.status %></span>
+              <span><%= novel.latest %></span>
+            </div>
+
+            <div class="hero-actions">
+              <a class="button primary" href="<%= novel.firstChapterUrl %>">开始阅读</a>
+              <a class="button secondary" href="#chapter-list">查看目录</a>
+            </div>
+          </div>
+        </section>
+
+        <section id="chapter-list" class="chapter-panel">
+          <div class="section-head">
+            <p class="kicker">Novel Index</p>
+            <h2>《<%= novel.title %>》目录</h2>
+            <p>已收录 <%= novel.chapters.length %> 章。点击任意章节就能进入阅读页。</p>
+          </div>
+
+          <div class="chapter-grid">
+            <% novel.chapters.forEach((chapter) => { %>
+              <a class="chapter-card" href="<%= chapter.url %>">
+                <span>第 <%= chapter.index %> 章</span>
+                <strong><%= chapter.title.replace(/^第\d+章\s*/, "") %></strong>
+              </a>
             <% }) %>
           </div>
         </section>
 
-        <% site.sections.forEach((section, index) => { %>
-          <section id="<%= section.id %>" class="content-block">
+        <% site.sections.forEach((section) => { %>
+          <section id="<%= section.id %>" class="content-section">
             <div class="section-head">
               <p class="kicker"><%= section.kicker %></p>
               <h2><%= section.title %></h2>
-              <p class="section-copy"><%= section.description %></p>
+              <p><%= section.description %></p>
             </div>
 
-            <div class="card-grid <%= index % 2 === 0 ? 'warm' : 'cool' %>">
+            <div class="feature-grid">
               <% section.items.forEach((item) => { %>
-                <article class="feature-card panel ink-border">
+                <article class="feature-card">
                   <p class="card-meta"><%= item.meta %></p>
                   <h3><%= item.name %></h3>
                   <p><%= item.summary %></p>
-                  <a href="#contact" class="card-link">准备填充真实内容</a>
                 </article>
               <% }) %>
             </div>
           </section>
         <% }) %>
 
-        <section id="contact" class="contact-wrap panel ink-border">
+        <section id="contact" class="contact-section">
           <div class="section-head">
-            <p class="kicker">联络卷轴</p>
+            <p class="kicker">Message</p>
             <h2>给我留言</h2>
-            <p class="section-copy">这里是动态功能入口。表单提交后，留言会保存到服务器本地文件。</p>
+            <p>想交流小说、测试项目或工具想法，可以从这里发消息。</p>
           </div>
 
           <% if (submitted) { %>
-            <div class="notice">留言已送达，服务器已经记录你的消息。</div>
+            <div class="notice">留言已保存到服务器。</div>
           <% } %>
 
           <form class="contact-form" method="post" action="/contact">
@@ -106,21 +103,18 @@
               <span>名字</span>
               <input type="text" name="name" placeholder="怎么称呼你" required>
             </label>
-
             <label>
               <span>邮箱</span>
               <input type="email" name="email" placeholder="your@email.com" required>
             </label>
-
             <label class="full">
               <span>留言内容</span>
-              <textarea name="message" rows="6" placeholder="想合作、交流测试项目或聊聊创作，都可以写在这里。" required></textarea>
+              <textarea name="message" rows="6" placeholder="写下你想说的话。" required></textarea>
             </label>
-
-            <button class="button primary" type="submit">发出卷轴</button>
+            <button class="button primary" type="submit">发送留言</button>
           </form>
         </section>
       </main>
     </div>
   </body>
-  </html>
+</html>

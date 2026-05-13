@@ -1,0 +1,80 @@
+<svg xmlns="http://www.w3.org/2000/svg" viewBox="0 0 900 1280" role="img" aria-labelledby="title desc">
+  <title id="title">渊 小说封面</title>
+  <desc id="desc">雾中水巷与两位古风人物剪影的原创书封占位图。</desc>
+  <defs>
+    <linearGradient id="sky" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#eef3f2"/>
+      <stop offset="0.46" stop-color="#c6d5d3"/>
+      <stop offset="1" stop-color="#25343a"/>
+    </linearGradient>
+    <linearGradient id="water" x1="0" y1="0" x2="0" y2="1">
+      <stop offset="0" stop-color="#dbe7e5"/>
+      <stop offset="1" stop-color="#263a3e"/>
+    </linearGradient>
+    <linearGradient id="robeWhite" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#f8fbf8"/>
+      <stop offset="1" stop-color="#98aaa4"/>
+    </linearGradient>
+    <linearGradient id="robeBlack" x1="0" y1="0" x2="1" y2="1">
+      <stop offset="0" stop-color="#182028"/>
+      <stop offset="1" stop-color="#07090d"/>
+    </linearGradient>
+    <filter id="mist">
+      <feGaussianBlur stdDeviation="18"/>
+    </filter>
+  </defs>
+
+  <rect width="900" height="1280" fill="url(#sky)"/>
+  <circle cx="720" cy="220" r="96" fill="#fff2d7" opacity="0.5"/>
+  <path d="M0 230 C160 120 260 250 390 130 C520 10 660 130 900 40 L900 420 L0 430 Z" fill="#9fb4b5" opacity="0.38"/>
+  <path d="M0 320 C180 210 280 330 460 210 C610 110 730 250 900 170 L900 540 L0 560 Z" fill="#6f888c" opacity="0.32"/>
+
+  <g opacity="0.68">
+    <path d="M40 520 L190 450 L310 520 L310 555 L40 555 Z" fill="#2b2f31"/>
+    <path d="M95 430 L190 380 L280 430 L260 450 L190 415 L112 455 Z" fill="#202326"/>
+    <rect x="86" y="516" width="190" height="170" fill="#353130"/>
+    <rect x="125" y="570" width="44" height="116" fill="#f2c988" opacity="0.78"/>
+    <path d="M630 515 L820 450 L890 510 L890 550 L630 550 Z" fill="#24282c"/>
+    <path d="M660 435 L810 378 L900 430 L880 455 L810 420 L680 460 Z" fill="#1b1f23"/>
+    <rect x="685" y="528" width="180" height="190" fill="#2b2d2e"/>
+    <rect x="740" y="585" width="46" height="124" fill="#f4c17c" opacity="0.72"/>
+  </g>
+
+  <rect y="645" width="900" height="635" fill="url(#water)" opacity="0.78"/>
+  <path d="M80 790 C230 750 380 820 540 765 C670 722 770 755 900 730" fill="none" stroke="#f0f7f4" stroke-width="5" opacity="0.42"/>
+  <path d="M0 860 C190 820 350 900 520 850 C700 800 810 850 900 825" fill="none" stroke="#f0f7f4" stroke-width="4" opacity="0.28"/>
+  <path d="M120 1010 C300 970 440 1035 620 992 C760 958 830 992 900 978" fill="none" stroke="#f0f7f4" stroke-width="3" opacity="0.2"/>
+
+  <g filter="url(#mist)" opacity="0.42">
+    <ellipse cx="210" cy="520" rx="210" ry="70" fill="#f5fbfa"/>
+    <ellipse cx="630" cy="585" rx="260" ry="82" fill="#eef7f4"/>
+    <ellipse cx="480" cy="350" rx="260" ry="78" fill="#ffffff"/>
+  </g>
+
+  <g transform="translate(250 292)">
+    <path d="M120 0 C83 32 77 83 92 130 C65 157 56 210 70 250 C30 360 16 505 0 740 L260 740 C242 494 232 350 188 252 C204 190 194 146 164 122 C185 64 168 18 120 0 Z" fill="url(#robeWhite)"/>
+    <path d="M98 30 C67 40 51 72 60 110 C85 92 122 91 154 111 C166 72 145 39 98 30 Z" fill="#161b1f"/>
+    <path d="M98 110 C130 91 174 110 175 148 C166 178 121 186 94 160 C80 143 81 123 98 110 Z" fill="#e7d1c0"/>
+    <path d="M72 245 C132 286 162 362 168 500" fill="none" stroke="#738882" stroke-width="8" opacity="0.52"/>
+    <path d="M30 436 C82 416 132 415 194 438" fill="none" stroke="#425956" stroke-width="5" opacity="0.38"/>
+    <path d="M-12 395 C64 350 150 342 238 382 C166 410 70 418 -12 395 Z" fill="#f3eee1" stroke="#5c6664" stroke-width="5"/>
+    <path d="M30 390 L200 384" stroke="#667270" stroke-width="3"/>
+    <path d="M65 365 L160 402" stroke="#667270" stroke-width="3"/>
+  </g>
+
+  <g transform="translate(505 365)">
+    <path d="M120 0 C78 20 66 70 80 110 C48 150 42 215 63 270 C28 378 10 518 0 668 L245 668 C232 492 216 350 178 255 C205 202 192 146 157 112 C175 62 160 18 120 0 Z" fill="url(#robeBlack)"/>
+    <path d="M92 25 C55 42 44 76 63 112 C96 92 136 90 173 116 C184 76 161 39 92 25 Z" fill="#101318"/>
+    <path d="M82 112 C118 88 166 103 176 140 C170 172 121 187 90 164 C72 151 68 128 82 112 Z" fill="#c9b5a7"/>
+    <path d="M170 320 C238 356 285 430 305 540" fill="none" stroke="#20262a" stroke-width="18"/>
+    <path d="M218 530 C268 522 310 545 335 594" fill="none" stroke="#d6d3c8" stroke-width="9"/>
+    <path d="M330 592 C366 628 370 690 332 720" fill="none" stroke="#d6d3c8" stroke-width="18"/>
+  </g>
+
+  <rect x="62" y="64" width="776" height="1152" rx="28" fill="none" stroke="#f9f2df" stroke-width="3" opacity="0.46"/>
+  <rect x="86" y="88" width="728" height="1104" rx="20" fill="none" stroke="#0f1518" stroke-width="2" opacity="0.18"/>
+
+  <text x="112" y="220" fill="#182326" font-family="Georgia, 'Times New Roman', serif" font-size="132" font-weight="700">渊</text>
+  <text x="118" y="282" fill="#25343a" font-family="serif" font-size="28" letter-spacing="8">雪落不白，账也从不清白</text>
+  <text x="720" y="1130" fill="#eef3f0" font-family="serif" font-size="32" writing-mode="tb">LQS</text>
+</svg>
