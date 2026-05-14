@@ -7,7 +7,7 @@
     <meta name="description" content="<%= novel.description %>">
     <link rel="stylesheet" href="/styles.css">
   </head>
-  <body class="reader-body">
+  <body class="reader-body reader-theme-paper">
     <header class="reader-topbar">
       <a class="brand" href="/">
         <span class="brand-mark">渊</span>
@@ -15,7 +15,9 @@
       </a>
       <div class="reader-topbar-actions">
         <a class="button secondary small" href="#chapter-content">正文</a>
-        <a class="button secondary small" href="#chapter-directory">目录</a>
+        <button class="button secondary small" type="button" data-reader-action="toggle-directory" aria-expanded="false" aria-controls="chapter-directory">目录</button>
+        <button class="button secondary small is-active" type="button" data-reader-theme="paper">白底</button>
+        <button class="button secondary small" type="button" data-reader-theme="ink">黑底</button>
       </div>
     </header>
 
@@ -42,7 +44,7 @@
         </nav>
       </article>
 
-      <aside class="reader-sidebar" id="chapter-directory">
+      <aside class="reader-sidebar" id="chapter-directory" aria-hidden="true">
         <div class="reader-sidebar-intro">
           <img class="reader-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
           <div>
@@ -60,5 +62,50 @@
         </nav>
       </aside>
     </main>
+
+    <script>
+      (() => {
+        const body = document.body;
+        const sidebar = document.getElementById("chapter-directory");
+        const toggleButton = document.querySelector('[data-reader-action="toggle-directory"]');
+        const themeButtons = Array.from(document.querySelectorAll("[data-reader-theme]"));
+        const themeKey = "yuan-reader-theme";
+        const validThemes = new Set(["paper", "ink"]);
+
+        const applyTheme = (theme) => {
+          const nextTheme = validThemes.has(theme) ? theme : "paper";
+          body.classList.remove("reader-theme-paper", "reader-theme-ink");
+          body.classList.add(`reader-theme-${nextTheme}`);
+          themeButtons.forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.readerTheme === nextTheme);
+          });
+          window.localStorage.setItem(themeKey, nextTheme);
+        };
+
+        const setDirectoryOpen = (open) => {
+          body.classList.toggle("reader-directory-open", open);
+          sidebar.setAttribute("aria-hidden", open ? "false" : "true");
+          toggleButton.setAttribute("aria-expanded", open ? "true" : "false");
+        };
+
+        toggleButton.addEventListener("click", () => {
+          setDirectoryOpen(!body.classList.contains("reader-directory-open"));
+        });
+
+        themeButtons.forEach((button) => {
+          button.addEventListener("click", () => applyTheme(button.dataset.readerTheme));
+        });
+
+        document.addEventListener("keydown", (event) => {
+          if (event.key === "Escape" && body.classList.contains("reader-directory-open")) {
+            setDirectoryOpen(false);
+          }
+        });
+
+        const savedTheme = window.localStorage.getItem(themeKey);
+        applyTheme(savedTheme || "paper");
+        setDirectoryOpen(false);
+      })();
+    </script>
   </body>
 </html>
