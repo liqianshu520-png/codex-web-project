@@ -73,6 +73,20 @@
       <div class="reader-progress-bar-fill" data-reader-progress></div>
     </div>
 
+    <nav class="reader-float-nav" aria-label="快速翻章">
+      <% if (previous) { %>
+        <a class="button secondary small" href="<%= previous.url %>">上一章</a>
+      <% } else { %>
+        <span class="button secondary small is-disabled" aria-disabled="true">上一章</span>
+      <% } %>
+      <button class="button secondary small" type="button" data-reader-action="toggle-directory-float" aria-expanded="false" aria-controls="chapter-directory">目录</button>
+      <% if (next) { %>
+        <a class="button primary small" href="<%= next.url %>">下一章</a>
+      <% } else { %>
+        <span class="button primary small is-disabled" aria-disabled="true">下一章</span>
+      <% } %>
+    </nav>
+
     <button class="reader-resume-button" type="button" hidden data-reader-resume>
       回到上次位置
     </button>
@@ -81,7 +95,7 @@
       (() => {
         const body = document.body;
         const sidebar = document.getElementById("chapter-directory");
-        const toggleButton = document.querySelector('[data-reader-action="toggle-directory"]');
+        const toggleButtons = Array.from(document.querySelectorAll('[data-reader-action="toggle-directory"], [data-reader-action="toggle-directory-float"]'));
         const themeButtons = Array.from(document.querySelectorAll("[data-reader-theme]"));
         const sizeButtons = Array.from(document.querySelectorAll("[data-reader-size]"));
         const spacingButtons = Array.from(document.querySelectorAll("[data-reader-spacing]"));
@@ -128,11 +142,15 @@
         const setDirectoryOpen = (open) => {
           body.classList.toggle("reader-directory-open", open);
           sidebar.setAttribute("aria-hidden", open ? "false" : "true");
-          toggleButton.setAttribute("aria-expanded", open ? "true" : "false");
+          toggleButtons.forEach((button) => {
+            button.setAttribute("aria-expanded", open ? "true" : "false");
+          });
         };
 
-        toggleButton.addEventListener("click", () => {
-          setDirectoryOpen(!body.classList.contains("reader-directory-open"));
+        toggleButtons.forEach((button) => {
+          button.addEventListener("click", () => {
+            setDirectoryOpen(!body.classList.contains("reader-directory-open"));
+          });
         });
 
         themeButtons.forEach((button) => {
