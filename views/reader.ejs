@@ -18,6 +18,9 @@
         <button class="button secondary small" type="button" data-reader-action="toggle-directory" aria-expanded="false" aria-controls="chapter-directory">目录</button>
         <button class="button secondary small is-active" type="button" data-reader-theme="paper">白底</button>
         <button class="button secondary small" type="button" data-reader-theme="ink">黑底</button>
+        <button class="button secondary small" type="button" data-reader-size="sm">小字</button>
+        <button class="button secondary small is-active" type="button" data-reader-size="md">中字</button>
+        <button class="button secondary small" type="button" data-reader-size="lg">大字</button>
       </div>
     </header>
 
@@ -69,8 +72,11 @@
         const sidebar = document.getElementById("chapter-directory");
         const toggleButton = document.querySelector('[data-reader-action="toggle-directory"]');
         const themeButtons = Array.from(document.querySelectorAll("[data-reader-theme]"));
+        const sizeButtons = Array.from(document.querySelectorAll("[data-reader-size]"));
         const themeKey = "yuan-reader-theme";
+        const sizeKey = "yuan-reader-size";
         const validThemes = new Set(["paper", "ink"]);
+        const validSizes = new Set(["sm", "md", "lg"]);
 
         const applyTheme = (theme) => {
           const nextTheme = validThemes.has(theme) ? theme : "paper";
@@ -80,6 +86,16 @@
             button.classList.toggle("is-active", button.dataset.readerTheme === nextTheme);
           });
           window.localStorage.setItem(themeKey, nextTheme);
+        };
+
+        const applySize = (size) => {
+          const nextSize = validSizes.has(size) ? size : "md";
+          body.classList.remove("reader-size-sm", "reader-size-md", "reader-size-lg");
+          body.classList.add(`reader-size-${nextSize}`);
+          sizeButtons.forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.readerSize === nextSize);
+          });
+          window.localStorage.setItem(sizeKey, nextSize);
         };
 
         const setDirectoryOpen = (open) => {
@@ -96,6 +112,10 @@
           button.addEventListener("click", () => applyTheme(button.dataset.readerTheme));
         });
 
+        sizeButtons.forEach((button) => {
+          button.addEventListener("click", () => applySize(button.dataset.readerSize));
+        });
+
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape" && body.classList.contains("reader-directory-open")) {
             setDirectoryOpen(false);
@@ -103,7 +123,9 @@
         });
 
         const savedTheme = window.localStorage.getItem(themeKey);
+        const savedSize = window.localStorage.getItem(sizeKey);
         applyTheme(savedTheme || "paper");
+        applySize(savedSize || "md");
         setDirectoryOpen(false);
       })();
     </script>

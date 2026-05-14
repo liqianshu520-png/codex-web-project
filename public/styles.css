@@ -373,6 +373,7 @@ img {
   --reader-nav-bg: rgba(255, 255, 255, 0.54);
   --reader-nav-active-bg: var(--blue);
   --reader-nav-active-color: #fff8ee;
+  --reader-article-max-width: 860px;
 }
 
 .reader-theme-ink {
@@ -386,6 +387,7 @@ img {
   --reader-nav-bg: rgba(255, 255, 255, 0.04);
   --reader-nav-active-bg: rgba(184, 145, 86, 0.9);
   --reader-nav-active-color: #101417;
+  --reader-article-max-width: 760px;
   background:
     radial-gradient(circle at 70% 0%, rgba(184, 145, 86, 0.14), transparent 28%),
     linear-gradient(180deg, #090d0f 0%, #11181c 100%);
@@ -480,7 +482,7 @@ img {
 
 .reader-article {
   padding: clamp(24px, 5vw, 58px);
-  max-width: 860px;
+  max-width: var(--reader-article-max-width);
   margin: 0 auto;
   background: var(--reader-article-bg);
 }
@@ -504,7 +506,7 @@ img {
 
 .chapter-content {
   font-family: "Noto Serif SC", "Songti SC", "SimSun", serif;
-  font-size: 1.08rem;
+  font-size: var(--reader-font-size, 1.08rem);
   line-height: 2.18;
   color: var(--reader-copy);
 }
@@ -537,6 +539,18 @@ img {
   background: var(--red);
   color: #fff8ee;
   border-color: var(--red);
+}
+
+.reader-size-sm {
+  --reader-font-size: 1rem;
+}
+
+.reader-size-md {
+  --reader-font-size: 1.08rem;
+}
+
+.reader-size-lg {
+  --reader-font-size: 1.18rem;
 }
 
 @media (max-width: 980px) {
