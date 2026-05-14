@@ -21,6 +21,9 @@
         <button class="button secondary small" type="button" data-reader-size="sm">小字</button>
         <button class="button secondary small is-active" type="button" data-reader-size="md">中字</button>
         <button class="button secondary small" type="button" data-reader-size="lg">大字</button>
+        <button class="button secondary small" type="button" data-reader-spacing="sm">紧距</button>
+        <button class="button secondary small is-active" type="button" data-reader-spacing="md">常距</button>
+        <button class="button secondary small" type="button" data-reader-spacing="lg">疏距</button>
       </div>
     </header>
 
@@ -66,6 +69,14 @@
       </aside>
     </main>
 
+    <div class="reader-progress-bar" aria-hidden="true">
+      <div class="reader-progress-bar-fill" data-reader-progress></div>
+    </div>
+
+    <button class="reader-resume-button" type="button" hidden data-reader-resume>
+      回到上次位置
+    </button>
+
     <script>
       (() => {
         const body = document.body;
@@ -73,10 +84,16 @@
         const toggleButton = document.querySelector('[data-reader-action="toggle-directory"]');
         const themeButtons = Array.from(document.querySelectorAll("[data-reader-theme]"));
         const sizeButtons = Array.from(document.querySelectorAll("[data-reader-size]"));
+        const spacingButtons = Array.from(document.querySelectorAll("[data-reader-spacing]"));
+        const resumeButton = document.querySelector("[data-reader-resume]");
+        const progressFill = document.querySelector("[data-reader-progress]");
         const themeKey = "yuan-reader-theme";
         const sizeKey = "yuan-reader-size";
+        const spacingKey = "yuan-reader-spacing";
+        const progressKey = `yuan-reader-progress:${window.location.pathname}`;
         const validThemes = new Set(["paper", "ink"]);
         const validSizes = new Set(["sm", "md", "lg"]);
+        const validSpacing = new Set(["sm", "md", "lg"]);
 
         const applyTheme = (theme) => {
           const nextTheme = validThemes.has(theme) ? theme : "paper";
@@ -98,6 +115,16 @@
           window.localStorage.setItem(sizeKey, nextSize);
         };
 
+        const applySpacing = (spacing) => {
+          const nextSpacing = validSpacing.has(spacing) ? spacing : "md";
+          body.classList.remove("reader-spacing-sm", "reader-spacing-md", "reader-spacing-lg");
+          body.classList.add(`reader-spacing-${nextSpacing}`);
+          spacingButtons.forEach((button) => {
+            button.classList.toggle("is-active", button.dataset.readerSpacing === nextSpacing);
+          });
+          window.localStorage.setItem(spacingKey, nextSpacing);
+        };
+
         const setDirectoryOpen = (open) => {
           body.classList.toggle("reader-directory-open", open);
           sidebar.setAttribute("aria-hidden", open ? "false" : "true");
@@ -116,6 +143,10 @@
           button.addEventListener("click", () => applySize(button.dataset.readerSize));
         });
 
+        spacingButtons.forEach((button) => {
+          button.addEventListener("click", () => applySpacing(button.dataset.readerSpacing));
+        });
+
         document.addEventListener("keydown", (event) => {
           if (event.key === "Escape" && body.classList.contains("reader-directory-open")) {
             setDirectoryOpen(false);
@@ -124,9 +155,32 @@
 
         const savedTheme = window.localStorage.getItem(themeKey);
         const savedSize = window.localStorage.getItem(sizeKey);
+        const savedSpacing = window.localStorage.getItem(spacingKey);
         applyTheme(savedTheme || "paper");
         applySize(savedSize || "md");
+        applySpacing(savedSpacing || "md");
         setDirectoryOpen(false);
+
+        const readProgress = () => {
+          const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
+          const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
+          const ratio = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
+          progressFill.style.width = `${ratio * 100}%`;
+          window.localStorage.setItem(progressKey, String(scrollTop));
+          resumeButton.hidden = scrollTop < 120;
+        };
+
+        const savedProgress = Number.parseFloat(window.localStorage.getItem(progressKey) || "0");
+        if (savedProgress > 480) {
+          resumeButton.hidden = false;
+          resumeButton.addEventListener("click", () => {
+            window.scrollTo({ top: savedProgress, behavior: "smooth" });
+          });
+        }
+
+        window.addEventListener("scroll", readProgress, { passive: true });
+        window.addEventListener("beforeunload", readProgress);
+        readProgress();
       })();
     </script>
   </body>
