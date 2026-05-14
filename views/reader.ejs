@@ -13,24 +13,14 @@
         <span class="brand-mark">渊</span>
         <span>返回首页</span>
       </a>
-      <a class="button secondary small" href="/#chapter-list">目录</a>
+      <div class="reader-topbar-actions">
+        <a class="button secondary small" href="#chapter-content">正文</a>
+        <a class="button secondary small" href="#chapter-directory">目录</a>
+      </div>
     </header>
 
     <main class="reader-layout">
-      <aside class="reader-sidebar">
-        <img class="reader-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
-        <h1><%= novel.title %></h1>
-        <p><%= novel.description %></p>
-        <nav class="reader-chapters" aria-label="章节目录">
-          <% novel.chapters.forEach((item) => { %>
-            <a class="<%= item.index === chapter.index ? 'active' : '' %>" href="<%= item.url %>">
-              <%= item.title %>
-            </a>
-          <% }) %>
-        </nav>
-      </aside>
-
-      <article class="reader-article">
+      <article class="reader-article" id="chapter-content">
         <div class="chapter-title">
           <p class="kicker">Chapter <%= chapter.index %></p>
           <h2><%= chapter.title %></h2>
@@ -51,6 +41,24 @@
           <% } %>
         </nav>
       </article>
+
+      <aside class="reader-sidebar" id="chapter-directory">
+        <div class="reader-sidebar-intro">
+          <img class="reader-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
+          <div>
+            <p class="kicker">Novel Index</p>
+            <h1><%= novel.title %></h1>
+            <p><%= novel.description %></p>
+          </div>
+        </div>
+        <nav class="reader-chapters" aria-label="章节目录">
+          <% novel.chapters.forEach((item) => { %>
+            <a class="<%= item.index === chapter.index ? 'active' : '' %>" href="<%= item.url %>">
+              <%= item.title %>
+            </a>
+          <% }) %>
+        </nav>
+      </aside>
     </main>
   </body>
 </html>

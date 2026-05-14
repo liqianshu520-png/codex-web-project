@@ -60,6 +60,12 @@ img {
   padding: 12px 0 22px;
 }
 
+.reader-topbar-actions {
+  display: flex;
+  flex-wrap: wrap;
+  gap: 10px;
+}
+
 .brand {
   display: inline-flex;
   align-items: center;
@@ -364,7 +370,7 @@ img {
   width: min(1220px, calc(100% - 32px));
   margin: 0 auto 70px;
   display: grid;
-  grid-template-columns: 320px minmax(0, 1fr);
+  grid-template-columns: minmax(0, 1fr) 320px;
   gap: 24px;
   align-items: start;
 }
@@ -382,6 +388,11 @@ img {
   padding: 18px;
 }
 
+.reader-sidebar-intro {
+  display: grid;
+  gap: 16px;
+}
+
 .reader-cover {
   width: 100%;
   aspect-ratio: 9 / 13;
@@ -390,9 +401,9 @@ img {
 }
 
 .reader-sidebar h1 {
-  margin: 18px 0 8px;
+  margin: 0 0 8px;
   font-family: Georgia, "Times New Roman", serif;
-  font-size: 2.4rem;
+  font-size: 2rem;
 }
 
 .reader-sidebar p {
@@ -404,7 +415,7 @@ img {
   display: grid;
   gap: 8px;
   margin-top: 16px;
-  max-height: 380px;
+  max-height: 420px;
   overflow: auto;
 }
 
@@ -470,10 +481,20 @@ img {
 
   .reader-sidebar {
     position: static;
+    order: 2;
   }
 
   .reader-chapters {
     max-height: none;
+  }
+
+  .reader-sidebar-intro {
+    grid-template-columns: 112px minmax(0, 1fr);
+    align-items: start;
+  }
+
+  .reader-cover {
+    border-width: 5px;
   }
 
   .topbar,
@@ -504,6 +525,15 @@ img {
 
   .novel-intro h1 {
     font-size: 4rem;
+  }
+
+  .reader-sidebar-intro {
+    grid-template-columns: 1fr;
+  }
+
+  .reader-topbar-actions,
+  .reader-topbar-actions .button {
+    width: 100%;
   }
 
   .hero-actions .button,
