@@ -113,10 +113,12 @@
         const resumeButton = document.querySelector("[data-reader-resume]");
         const progressFill = document.querySelector("[data-reader-progress]");
         const chapterLinks = Array.from(document.querySelectorAll("[data-chapter-url]"));
+        const currentChapterLink = document.querySelector(".reader-chapter-link.active");
         const themeKey = "yuan-reader-theme";
         const sizeKey = "yuan-reader-size";
         const spacingKey = "yuan-reader-spacing";
         const progressKey = `yuan-reader-progress:${window.location.pathname}`;
+        const lastPathKey = "yuan-reader-last-path";
         const validThemes = new Set(["paper", "ink"]);
         const validSizes = new Set(["sm", "md", "lg"]);
         const validSpacing = new Set(["sm", "md", "lg"]);
@@ -191,6 +193,11 @@
           });
         };
 
+        const ensureCurrentChapterVisible = () => {
+          if (!currentChapterLink) return;
+          currentChapterLink.scrollIntoView({ block: "nearest", inline: "nearest" });
+        };
+
         toggleButtons.forEach((button) => {
           button.addEventListener("click", () => {
             setDirectoryOpen(!body.classList.contains("reader-directory-open"));
@@ -222,6 +229,7 @@
         applySize(savedSize || "md");
         applySpacing(savedSpacing || "md");
         setDirectoryOpen(false);
+        ensureCurrentChapterVisible();
 
         const readProgress = () => {
           const maxScroll = Math.max(document.documentElement.scrollHeight - window.innerHeight, 0);
@@ -235,11 +243,18 @@
 
         const currentProgress = readChapterProgress(window.location.pathname);
         const savedProgress = currentProgress && typeof currentProgress.top === "number" ? currentProgress.top : 0;
+        const lastPath = window.localStorage.getItem(lastPathKey);
+        const isFreshChapterNavigation = lastPath && lastPath !== window.location.pathname;
+        window.localStorage.setItem(lastPathKey, window.location.pathname);
         if (savedProgress > 480) {
           resumeButton.hidden = false;
           resumeButton.addEventListener("click", () => {
             window.scrollTo({ top: savedProgress, behavior: "smooth" });
           });
+        }
+
+        if (isFreshChapterNavigation) {
+          window.scrollTo({ top: 0, behavior: "auto" });
         }
 
         window.addEventListener("scroll", readProgress, { passive: true });

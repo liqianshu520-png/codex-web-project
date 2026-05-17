@@ -387,9 +387,9 @@ img {
   --reader-card-border: rgba(222, 230, 227, 0.08);
   --reader-article-bg: linear-gradient(180deg, rgba(16, 20, 23, 0.98), rgba(20, 25, 28, 0.98));
   --reader-sidebar-bg: linear-gradient(180deg, rgba(18, 23, 26, 0.98), rgba(13, 18, 20, 0.98));
-  --reader-title: #f7f1e5;
-  --reader-copy: rgba(241, 235, 222, 0.88);
-  --reader-muted: rgba(214, 208, 196, 0.7);
+  --reader-title: #e8dcc6;
+  --reader-copy: rgba(225, 215, 198, 0.84);
+  --reader-muted: rgba(190, 182, 168, 0.68);
   --reader-nav-bg: rgba(255, 255, 255, 0.04);
   --reader-nav-active-bg: rgba(184, 145, 86, 0.9);
   --reader-nav-active-color: #101417;
@@ -401,12 +401,12 @@ img {
 
 .reader-theme-ink .reader-topbar,
 .reader-theme-ink .reader-topbar .brand {
-  color: #f7f1e5;
+  color: #e8dcc6;
 }
 
 .reader-theme-ink .reader-topbar .button.secondary {
   background: rgba(255, 255, 255, 0.035);
-  color: rgba(247, 241, 229, 0.9);
+  color: rgba(232, 220, 198, 0.88);
   border-color: rgba(255, 255, 255, 0.12);
 }
 
@@ -600,7 +600,7 @@ img {
 
 .reader-theme-ink .reader-topbar-actions .button.is-active {
   background: rgba(184, 145, 86, 0.18);
-  color: #f5e9d5;
+  color: #e7dcc7;
   border-color: rgba(184, 145, 86, 0.32);
 }
 
@@ -684,7 +684,7 @@ img {
 
 .reader-theme-ink .reader-resume-button {
   background: rgba(22, 28, 32, 0.88);
-  color: rgba(247, 241, 229, 0.92);
+  color: rgba(232, 220, 198, 0.9);
   border-color: rgba(255, 255, 255, 0.08);
 }
 
