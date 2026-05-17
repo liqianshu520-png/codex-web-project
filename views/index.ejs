@@ -76,14 +76,22 @@
           <div class="gallery-layout">
             <div class="gallery-upload-card">
               <h3>上传新图片</h3>
-              <p>支持 `JPG / PNG / WEBP / GIF`，单张不超过 8MB。上传后会直接出现在下方图集中。</p>
+              <p>支持 `JPG / PNG / WEBP / GIF`，单张不超过 50MB。上传后会直接出现在下方图集中。</p>
 
               <% if (uploadSuccess) { %>
                 <div class="notice">图片已经上传好了。</div>
               <% } %>
 
-              <% if (uploadError) { %>
-                <div class="notice notice-error">这次上传没成功，请确认图片格式和大小后再试。</div>
+              <% if (uploadError === "size") { %>
+                <div class="notice notice-error">这张图太大了。现在单张上限是 50MB，压小一点再传就行。</div>
+              <% } %>
+
+              <% if (uploadError === "format") { %>
+                <div class="notice notice-error">这次上传没成功，请确认图片格式是 JPG、PNG、WEBP 或 GIF。</div>
+              <% } %>
+
+              <% if (uploadError === "missing") { %>
+                <div class="notice notice-error">站点没有收到这张图。你可以重新选一次图片再上传，如果还是不行我再继续给你收这个口。</div>
               <% } %>
 
               <form class="gallery-upload-form" method="post" action="/novels/yuan/gallery" enctype="multipart/form-data">

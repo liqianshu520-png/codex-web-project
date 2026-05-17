@@ -45,7 +45,7 @@ const upload = multer({
     cb(new Error("Only image uploads are allowed."));
   },
   limits: {
-    fileSize: 8 * 1024 * 1024
+    fileSize: 50 * 1024 * 1024
   }
 });
 
@@ -168,7 +168,7 @@ app.get("/", async (req, res, next) => {
       gallery,
       submitted: req.query.submitted === "1",
       uploadSuccess: req.query.uploaded === "1",
-      uploadError: req.query.uploadError === "1"
+      uploadError: req.query.uploadError || ""
     });
   } catch (error) {
     next(error);
@@ -223,15 +223,21 @@ app.get("/api/site", async (req, res, next) => {
   }
 });
 
-app.post("/novels/yuan/gallery", upload.single("image"), async (req, res, next) => {
-  try {
-    if (!req.file) {
-      return res.redirect("/?uploadError=1#gallery");
+app.post("/novels/yuan/gallery", (req, res, next) => {
+  upload.single("image")(req, res, (error) => {
+    if (error) {
+      if (error.code === "LIMIT_FILE_SIZE") {
+        return res.redirect("/?uploadError=size#gallery");
+      }
+      return res.redirect("/?uploadError=format#gallery");
     }
-    res.redirect("/?uploaded=1#gallery");
-  } catch (error) {
-    next(error);
-  }
+
+    if (!req.file) {
+      return res.redirect("/?uploadError=missing#gallery");
+    }
+
+    return res.redirect("/?uploaded=1#gallery");
+  });
 });
 
 app.post("/contact", async (req, res, next) => {
@@ -260,7 +266,10 @@ app.post("/contact", async (req, res, next) => {
 app.use((error, req, res, next) => {
   console.error(error);
   if (req.path === "/novels/yuan/gallery") {
-    return res.redirect("/?uploadError=1#gallery");
+    if (error && error.code === "LIMIT_FILE_SIZE") {
+      return res.redirect("/?uploadError=size#gallery");
+    }
+    return res.redirect("/?uploadError=missing#gallery");
   }
   res.status(500).send("Server error");
 });
