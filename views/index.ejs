@@ -11,8 +11,8 @@
     <div class="site-shell">
       <header class="topbar">
         <a class="brand" href="/">
-          <span class="brand-mark">渊</span>
-          <span>渊 · 小说站</span>
+          <span class="brand-mark"><%= site.hero.title %></span>
+          <span><%= site.hero.title %> · 小说站</span>
         </a>
         <nav class="nav-links" aria-label="主导航">
           <a href="#novel">小说</a>
@@ -25,9 +25,15 @@
       <main>
         <section id="novel" class="novel-hero">
           <div class="book-cover-wrap">
-            <a class="book-cover-link" href="<%= novel.firstChapterUrl %>" aria-label="开始阅读《<%= novel.title %>》">
-              <img class="book-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
-            </a>
+            <% if (novel.chapters.length > 0) { %>
+              <a class="book-cover-link" href="<%= novel.firstChapterUrl %>" aria-label="开始阅读《<%= novel.title %>》">
+                <img class="book-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
+              </a>
+            <% } else { %>
+              <div class="book-cover-link is-placeholder" aria-label="新作筹备中">
+                <img class="book-cover" src="<%= novel.cover %>" alt="《<%= novel.title %>》封面">
+              </div>
+            <% } %>
           </div>
 
           <div class="novel-intro">
@@ -43,8 +49,13 @@
             </div>
 
             <div class="hero-actions">
-              <a class="button primary" href="<%= novel.firstChapterUrl %>">开始阅读</a>
-              <a class="button secondary" href="#chapter-list">查看目录</a>
+              <% if (novel.chapters.length > 0) { %>
+                <a class="button primary" href="<%= novel.firstChapterUrl %>">开始阅读</a>
+                <a class="button secondary" href="#chapter-list">查看目录</a>
+              <% } else { %>
+                <span class="button primary is-disabled">新作筹备中</span>
+                <a class="button secondary" href="#gallery">查看图集</a>
+              <% } %>
             </div>
           </div>
         </section>
@@ -53,17 +64,28 @@
           <div class="section-head">
             <p class="kicker">Novel Index</p>
             <h2>《<%= novel.title %>》目录</h2>
-            <p>已收录 <%= novel.chapters.length %> 章。点击任意章节就能进入阅读页。</p>
+            <% if (novel.chapters.length > 0) { %>
+              <p>已收录 <%= novel.chapters.length %> 章。点击任意章节就能进入阅读页。</p>
+            <% } else { %>
+              <p>当前线上正文已经清空，新小说整理好后会从这里重新上架。</p>
+            <% } %>
           </div>
 
-          <div class="chapter-grid">
-            <% novel.chapters.forEach((chapter) => { %>
-              <a class="chapter-card" href="<%= chapter.url %>">
-                <span>第 <%= chapter.index %> 章</span>
-                <strong><%= chapter.title.replace(/^第\d+章\s*/, "") %></strong>
-              </a>
-            <% }) %>
-          </div>
+          <% if (novel.chapters.length > 0) { %>
+            <div class="chapter-grid">
+              <% novel.chapters.forEach((chapter) => { %>
+                <a class="chapter-card" href="<%= chapter.url %>">
+                  <span>第 <%= chapter.index %> 章</span>
+                  <strong><%= chapter.title.replace(/^第\d+章\s*/, "") %></strong>
+                </a>
+              <% }) %>
+            </div>
+          <% } else { %>
+            <article class="chapter-empty">
+              <h3>旧章节已全部下架</h3>
+              <p>你现在看到的是干净的发站状态。后面等新小说准备好，我们再把新的章节一批批挂上来。</p>
+            </article>
+          <% } %>
         </section>
 
         <section id="gallery" class="content-section gallery-section">

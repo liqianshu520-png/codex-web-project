@@ -178,6 +178,9 @@ app.get("/", async (req, res, next) => {
 app.get("/novels/yuan", async (req, res, next) => {
   try {
     const novel = await getYuanNovel();
+    if (!novel.chapters.length) {
+      return res.redirect("/#novel");
+    }
     res.redirect(novel.firstChapterUrl);
   } catch (error) {
     next(error);

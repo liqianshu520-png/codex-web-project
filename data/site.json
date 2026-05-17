@@ -1,17 +1,17 @@
 {
   "hero": {
-    "eyebrow": "Yuan Novel",
-    "title": "渊",
-    "subtitle": "一个关于雪、账、旧路与人心深处回声的长篇小说站点。这里专门放小说正文、章节目录和相关图集。"
+    "eyebrow": "New Novel Incoming",
+    "title": "书",
+    "subtitle": "线上旧稿已经清空，这里暂时作为新小说的发站预留页。等新作准备好后，会从这里重新开始连载。"
   },
   "stats": [
     {
       "label": "已收录章节",
-      "value": "13"
+      "value": "0"
     },
     {
       "label": "站点重点",
-      "value": "小说连载"
+      "value": "新作筹备"
     },
     {
       "label": "运行状态",
