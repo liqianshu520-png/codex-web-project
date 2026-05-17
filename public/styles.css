@@ -44,6 +44,216 @@ img {
   display: block;
 }
 
+.ink-home {
+  color: #1c2526;
+  background:
+    linear-gradient(rgba(16, 20, 23, 0.045) 1px, transparent 1px),
+    linear-gradient(90deg, rgba(16, 20, 23, 0.035) 1px, transparent 1px),
+    radial-gradient(circle at 18% 0%, rgba(91, 126, 119, 0.24), transparent 30%),
+    radial-gradient(circle at 92% 10%, rgba(142, 61, 47, 0.12), transparent 28%),
+    linear-gradient(180deg, #152123 0%, #e8dfd0 48%, #f5efe5 100%);
+  background-size: 46px 46px, 46px 46px, auto, auto, auto;
+}
+
+.ink-home .site-shell {
+  width: min(1320px, calc(100% - 36px));
+}
+
+.ink-topbar {
+  position: sticky;
+  top: 0;
+  z-index: 30;
+  padding: 14px 0;
+  backdrop-filter: blur(12px);
+}
+
+.ink-home .brand-mark {
+  background: rgba(20, 31, 33, 0.92);
+  border-color: rgba(236, 226, 207, 0.58);
+  box-shadow: inset 0 0 0 2px rgba(184, 145, 86, 0.24), 0 12px 28px rgba(0, 0, 0, 0.18);
+}
+
+.ink-hero {
+  min-height: min(780px, calc(100vh - 86px));
+  position: relative;
+  display: grid;
+  align-items: end;
+  overflow: hidden;
+  border: 1px solid rgba(236, 226, 207, 0.36);
+  box-shadow: 0 32px 100px rgba(8, 15, 18, 0.28);
+  background: #11191b;
+}
+
+.ink-hero-bg {
+  position: absolute;
+  inset: 0;
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+}
+
+.ink-hero-shade {
+  position: absolute;
+  inset: 0;
+  background:
+    linear-gradient(90deg, rgba(10, 16, 18, 0.82), rgba(10, 16, 18, 0.28) 48%, rgba(10, 16, 18, 0.52)),
+    linear-gradient(180deg, rgba(10, 16, 18, 0.1), rgba(10, 16, 18, 0.82));
+}
+
+.ink-hero-copy {
+  position: relative;
+  z-index: 1;
+  max-width: 760px;
+  padding: clamp(28px, 5vw, 72px);
+  color: #f9f1e3;
+}
+
+.ink-hero-copy h1 {
+  margin: 0;
+  font-family: Georgia, "Times New Roman", "Microsoft YaHei", serif;
+  font-size: clamp(4.2rem, 11vw, 9.5rem);
+  line-height: 0.9;
+  text-shadow: 0 18px 38px rgba(0, 0, 0, 0.38);
+}
+
+.ink-hero-copy .tagline {
+  color: #e9d8b8;
+}
+
+.ink-hero-copy .intro-copy {
+  color: rgba(255, 248, 235, 0.84);
+}
+
+.ink-section {
+  margin-top: 34px;
+  padding: clamp(24px, 4vw, 46px);
+  background:
+    linear-gradient(180deg, rgba(255, 252, 245, 0.94), rgba(235, 226, 212, 0.92));
+  border: 1px solid rgba(35, 45, 45, 0.12);
+  box-shadow: 0 28px 86px rgba(8, 15, 18, 0.16);
+}
+
+.mood-section,
+.character-section {
+  position: relative;
+  overflow: hidden;
+}
+
+.mood-section::before,
+.character-section::before {
+  content: "";
+  position: absolute;
+  inset: 0;
+  pointer-events: none;
+  background:
+    radial-gradient(circle at 8% 0%, rgba(87, 123, 115, 0.14), transparent 32%),
+    radial-gradient(circle at 92% 12%, rgba(184, 145, 86, 0.16), transparent 32%);
+}
+
+.ink-section > * {
+  position: relative;
+  z-index: 1;
+}
+
+.mood-grid {
+  display: grid;
+  grid-template-columns: 1.45fr 0.9fr;
+  gap: 18px;
+}
+
+.mood-card,
+.character-card {
+  position: relative;
+  min-height: 360px;
+  overflow: hidden;
+  background: #172022;
+  border: 1px solid rgba(30, 40, 40, 0.16);
+}
+
+.mood-card-wide {
+  min-height: 430px;
+}
+
+.mood-card img,
+.character-card img {
+  width: 100%;
+  height: 100%;
+  object-fit: cover;
+  filter: saturate(0.88) contrast(1.04);
+  transition: transform 220ms ease, filter 220ms ease;
+}
+
+.mood-card:hover img,
+.character-card:hover img {
+  transform: scale(1.025);
+  filter: saturate(0.98) contrast(1.06);
+}
+
+.mood-card div,
+.character-caption {
+  position: absolute;
+  left: 18px;
+  right: 18px;
+  bottom: 18px;
+  padding: 16px;
+  color: #fff8ea;
+  background: linear-gradient(90deg, rgba(17, 25, 27, 0.84), rgba(17, 25, 27, 0.36));
+  border-left: 3px solid rgba(184, 145, 86, 0.9);
+  backdrop-filter: blur(8px);
+}
+
+.mood-card span,
+.character-caption span {
+  display: block;
+  margin-bottom: 6px;
+  color: #d9bd85;
+  font-weight: 900;
+  font-size: 0.78rem;
+}
+
+.mood-card strong,
+.character-caption strong {
+  font-size: 1.12rem;
+}
+
+.character-grid {
+  display: grid;
+  grid-template-columns: 1.1fr 0.95fr 0.95fr;
+  gap: 18px;
+  align-items: stretch;
+}
+
+.character-card {
+  min-height: 470px;
+}
+
+.character-card.tall {
+  min-height: 620px;
+}
+
+.ink-home .gallery-section {
+  background:
+    linear-gradient(180deg, rgba(248, 243, 234, 0.96), rgba(232, 222, 207, 0.94));
+}
+
+.ink-home .gallery-upload-card,
+.ink-home .gallery-empty,
+.ink-home .gallery-card,
+.ink-home .chapter-empty,
+.ink-home .chapter-card {
+  border-color: rgba(30, 40, 40, 0.14);
+  background:
+    linear-gradient(180deg, rgba(255, 253, 247, 0.82), rgba(238, 228, 212, 0.82));
+}
+
+.ink-home .gallery-card a {
+  aspect-ratio: 3 / 4;
+}
+
+.ink-home .contact-section {
+  margin-bottom: 0;
+}
+
 .site-shell {
   width: min(1180px, calc(100% - 32px));
   margin: 0 auto;
@@ -252,6 +462,12 @@ img {
 .button.is-disabled {
   opacity: 0.45;
   pointer-events: none;
+}
+
+.ink-home .button.primary.is-disabled {
+  background: rgba(120, 63, 48, 0.72);
+  color: rgba(255, 244, 226, 0.76);
+  border-color: rgba(226, 193, 132, 0.2);
 }
 
 .chapter-panel,
@@ -858,6 +1074,18 @@ img {
   .reader-topbar-actions {
     justify-content: flex-start;
   }
+
+  .mood-grid,
+  .character-grid {
+    grid-template-columns: 1fr;
+  }
+
+  .mood-card,
+  .mood-card-wide,
+  .character-card,
+  .character-card.tall {
+    min-height: 420px;
+  }
 }
 
 @media (max-width: 640px) {
@@ -868,11 +1096,63 @@ img {
   }
 
   .novel-hero,
+  .ink-hero,
   .chapter-panel,
   .content-section,
+  .ink-section,
   .contact-section,
   .reader-article {
     padding: 20px;
+  }
+
+  .ink-home .site-shell {
+    width: min(100% - 20px, 1180px);
+  }
+
+  .ink-topbar {
+    position: static;
+  }
+
+  .ink-hero {
+    min-height: 680px;
+    align-items: end;
+  }
+
+  .ink-hero-copy {
+    padding: 22px;
+  }
+
+  .ink-hero-copy h1 {
+    font-size: 4rem;
+  }
+
+  .ink-hero-copy .intro-copy,
+  .section-head h2,
+  .section-head p {
+    overflow-wrap: anywhere;
+  }
+
+  .section-head h2 {
+    font-size: 1.9rem;
+    line-height: 1.16;
+  }
+
+  .section-head p {
+    font-size: 0.95rem;
+  }
+
+  .mood-card,
+  .mood-card-wide,
+  .character-card,
+  .character-card.tall {
+    min-height: 360px;
+  }
+
+  .mood-card div,
+  .character-caption {
+    left: 12px;
+    right: 12px;
+    bottom: 12px;
   }
 
   .novel-intro {
