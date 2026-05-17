@@ -1,6 +1,7 @@
 const express = require("express");
 const fs = require("fs/promises");
 const path = require("path");
+const multer = require("multer");
 
 const app = express();
 const port = process.env.PORT || 3000;
@@ -9,6 +10,7 @@ const dataFile = path.join(__dirname, "data", "site.json");
 const messagesFile = path.join(__dirname, "data", "messages.json");
 const novelMetaFile = path.join(__dirname, "data", "novels", "yuan", "meta.json");
 const yuanChaptersDir = path.join(__dirname, "data", "novels", "yuan", "chapters");
+const yuanGalleryDir = path.join(__dirname, "public", "uploads", "yuan");
 
 app.set("view engine", "ejs");
 app.set("views", path.join(__dirname, "views"));
@@ -16,6 +18,36 @@ app.set("views", path.join(__dirname, "views"));
 app.use(express.urlencoded({ extended: true }));
 app.use(express.json());
 app.use(express.static(path.join(__dirname, "public")));
+
+const upload = multer({
+  storage: multer.diskStorage({
+    destination: (req, file, cb) => {
+      cb(null, yuanGalleryDir);
+    },
+    filename: (req, file, cb) => {
+      const ext = path.extname(file.originalname || "").toLowerCase();
+      const base = path
+        .basename(file.originalname || "image", ext)
+        .replace(/[^\p{L}\p{N}\-_]+/gu, "-")
+        .replace(/-+/g, "-")
+        .replace(/^-|-$/g, "")
+        .slice(0, 48) || "image";
+      cb(null, `${Date.now()}-${base}${ext}`);
+    }
+  }),
+  fileFilter: (req, file, cb) => {
+    const ext = path.extname(file.originalname || "").toLowerCase();
+    const byMime = /^image\/(png|jpe?g|webp|gif)$/i.test(file.mimetype || "");
+    const byExt = [".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(ext);
+    if (byMime || byExt) {
+      return cb(null, true);
+    }
+    cb(new Error("Only image uploads are allowed."));
+  },
+  limits: {
+    fileSize: 8 * 1024 * 1024
+  }
+});
 
 async function readJson(filePath, fallback) {
   try {
@@ -66,6 +98,39 @@ function chapterTitleFromFile(fileName, fallbackIndex) {
   return path.basename(fileName, ".md").replace("-", " ") || `第${fallbackIndex + 1}章`;
 }
 
+async function ensureDirectories() {
+  await fs.mkdir(yuanGalleryDir, { recursive: true });
+}
+
+async function getYuanGallery() {
+  await ensureDirectories();
+  const entries = await fs.readdir(yuanGalleryDir, { withFileTypes: true });
+  const files = await Promise.all(
+    entries
+      .filter((entry) => entry.isFile() && [".png", ".jpg", ".jpeg", ".webp", ".gif"].includes(path.extname(entry.name).toLowerCase()))
+      .map(async (entry) => {
+        const absolutePath = path.join(yuanGalleryDir, entry.name);
+        const stats = await fs.stat(absolutePath);
+        return {
+          name: entry.name,
+          url: `/uploads/yuan/${encodeURIComponent(entry.name)}`,
+          uploadedAt: stats.mtime.toISOString(),
+          uploadedLabel: new Intl.DateTimeFormat("zh-CN", {
+            year: "numeric",
+            month: "2-digit",
+            day: "2-digit",
+            hour: "2-digit",
+            minute: "2-digit",
+            hour12: false,
+            timeZone: "Asia/Shanghai"
+          }).format(stats.mtime)
+        };
+      })
+  );
+
+  return files.sort((a, b) => b.uploadedAt.localeCompare(a.uploadedAt));
+}
+
 async function getYuanNovel() {
   const [meta, chapterFiles] = await Promise.all([
     readJson(novelMetaFile, {}),
@@ -91,15 +156,19 @@ async function getYuanNovel() {
 
 app.get("/", async (req, res, next) => {
   try {
-    const [site, novel] = await Promise.all([
+    const [site, novel, gallery] = await Promise.all([
       readJson(dataFile, {}),
-      getYuanNovel()
+      getYuanNovel(),
+      getYuanGallery()
     ]);
 
     res.render("index", {
       site,
       novel,
-      submitted: req.query.submitted === "1"
+      gallery,
+      submitted: req.query.submitted === "1",
+      uploadSuccess: req.query.uploaded === "1",
+      uploadError: req.query.uploadError === "1"
     });
   } catch (error) {
     next(error);
@@ -143,11 +212,23 @@ app.get("/novels/yuan/chapter/:chapter", async (req, res, next) => {
 
 app.get("/api/site", async (req, res, next) => {
   try {
-    const [site, novel] = await Promise.all([
+    const [site, novel, gallery] = await Promise.all([
       readJson(dataFile, {}),
-      getYuanNovel()
+      getYuanNovel(),
+      getYuanGallery()
     ]);
-    res.json({ ...site, novel });
+    res.json({ ...site, novel, gallery });
+  } catch (error) {
+    next(error);
+  }
+});
+
+app.post("/novels/yuan/gallery", upload.single("image"), async (req, res, next) => {
+  try {
+    if (!req.file) {
+      return res.redirect("/?uploadError=1#gallery");
+    }
+    res.redirect("/?uploaded=1#gallery");
   } catch (error) {
     next(error);
   }
@@ -178,9 +259,19 @@ app.post("/contact", async (req, res, next) => {
 
 app.use((error, req, res, next) => {
   console.error(error);
+  if (req.path === "/novels/yuan/gallery") {
+    return res.redirect("/?uploadError=1#gallery");
+  }
   res.status(500).send("Server error");
 });
 
-app.listen(port, () => {
-  console.log(`Site running on http://localhost:${port}`);
-});
+ensureDirectories()
+  .then(() => {
+    app.listen(port, () => {
+      console.log(`Site running on http://localhost:${port}`);
+    });
+  })
+  .catch((error) => {
+    console.error(error);
+    process.exit(1);
+  });
