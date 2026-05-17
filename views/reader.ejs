@@ -14,16 +14,16 @@
         <span>返回首页</span>
       </a>
       <div class="reader-topbar-actions">
-        <a class="button secondary small" href="#chapter-content">正文</a>
+        <a class="button secondary small reader-mobile-hide" href="#chapter-content">正文</a>
         <button class="button secondary small" type="button" data-reader-action="toggle-directory" aria-expanded="false" aria-controls="chapter-directory">目录</button>
         <button class="button secondary small is-active" type="button" data-reader-theme="paper">白底</button>
         <button class="button secondary small" type="button" data-reader-theme="ink">黑底</button>
-        <button class="button secondary small" type="button" data-reader-size="sm">小字</button>
-        <button class="button secondary small is-active" type="button" data-reader-size="md">中字</button>
-        <button class="button secondary small" type="button" data-reader-size="lg">大字</button>
-        <button class="button secondary small" type="button" data-reader-spacing="sm">紧距</button>
-        <button class="button secondary small is-active" type="button" data-reader-spacing="md">常距</button>
-        <button class="button secondary small" type="button" data-reader-spacing="lg">疏距</button>
+        <button class="button secondary small reader-advanced-control" type="button" data-reader-size="sm">小字</button>
+        <button class="button secondary small is-active reader-advanced-control" type="button" data-reader-size="md">中字</button>
+        <button class="button secondary small reader-advanced-control" type="button" data-reader-size="lg">大字</button>
+        <button class="button secondary small reader-advanced-control" type="button" data-reader-spacing="sm">紧距</button>
+        <button class="button secondary small is-active reader-advanced-control" type="button" data-reader-spacing="md">常距</button>
+        <button class="button secondary small reader-advanced-control" type="button" data-reader-spacing="lg">疏距</button>
       </div>
     </header>
 
@@ -61,8 +61,19 @@
         </div>
         <nav class="reader-chapters" aria-label="章节目录">
           <% novel.chapters.forEach((item) => { %>
-            <a class="<%= item.index === chapter.index ? 'active' : '' %>" href="<%= item.url %>">
-              <%= item.title %>
+            <a
+              class="reader-chapter-link <%= item.index === chapter.index ? 'active' : '' %>"
+              href="<%= item.url %>"
+              data-chapter-url="<%= item.url %>"
+              data-chapter-index="<%= item.index %>">
+              <span class="reader-chapter-link-title"><%= item.title %></span>
+              <span class="reader-chapter-link-meta">
+                <% if (item.index === chapter.index) { %>
+                  <span class="reader-chapter-current">当前</span>
+                <% } %>
+                <span class="reader-chapter-progress" data-progress-label hidden></span>
+              </span>
+              <span class="reader-chapter-progress-bar"><span class="reader-chapter-progress-fill" data-progress-fill></span></span>
             </a>
           <% }) %>
         </nav>
@@ -101,6 +112,7 @@
         const spacingButtons = Array.from(document.querySelectorAll("[data-reader-spacing]"));
         const resumeButton = document.querySelector("[data-reader-resume]");
         const progressFill = document.querySelector("[data-reader-progress]");
+        const chapterLinks = Array.from(document.querySelectorAll("[data-chapter-url]"));
         const themeKey = "yuan-reader-theme";
         const sizeKey = "yuan-reader-size";
         const spacingKey = "yuan-reader-spacing";
@@ -147,6 +159,38 @@
           });
         };
 
+        const readChapterProgress = (chapterUrl) => {
+          try {
+            const raw = window.localStorage.getItem(`yuan-reader-progress:${chapterUrl}`);
+            if (!raw) return null;
+            const parsed = JSON.parse(raw);
+            if (typeof parsed.ratio !== "number") return null;
+            return parsed;
+          } catch (error) {
+            return null;
+          }
+        };
+
+        const paintChapterProgress = () => {
+          chapterLinks.forEach((link) => {
+            const progress = readChapterProgress(link.dataset.chapterUrl);
+            const label = link.querySelector("[data-progress-label]");
+            const fill = link.querySelector("[data-progress-fill]");
+            if (!label || !fill) return;
+            if (!progress || progress.ratio <= 0.02) {
+              label.hidden = true;
+              fill.style.width = "0%";
+              link.classList.remove("is-read");
+              return;
+            }
+            const percent = Math.max(1, Math.min(100, Math.round(progress.ratio * 100)));
+            fill.style.width = `${percent}%`;
+            label.hidden = false;
+            label.textContent = `${percent}%`;
+            link.classList.add("is-read");
+          });
+        };
+
         toggleButtons.forEach((button) => {
           button.addEventListener("click", () => {
             setDirectoryOpen(!body.classList.contains("reader-directory-open"));
@@ -184,11 +228,13 @@
           const scrollTop = window.scrollY || document.documentElement.scrollTop || 0;
           const ratio = maxScroll > 0 ? Math.min(scrollTop / maxScroll, 1) : 0;
           progressFill.style.width = `${ratio * 100}%`;
-          window.localStorage.setItem(progressKey, String(scrollTop));
+          window.localStorage.setItem(progressKey, JSON.stringify({ top: scrollTop, ratio }));
           resumeButton.hidden = scrollTop < 120;
+          paintChapterProgress();
         };
 
-        const savedProgress = Number.parseFloat(window.localStorage.getItem(progressKey) || "0");
+        const currentProgress = readChapterProgress(window.location.pathname);
+        const savedProgress = currentProgress && typeof currentProgress.top === "number" ? currentProgress.top : 0;
         if (savedProgress > 480) {
           resumeButton.hidden = false;
           resumeButton.addEventListener("click", () => {
@@ -198,6 +244,7 @@
 
         window.addEventListener("scroll", readProgress, { passive: true });
         window.addEventListener("beforeunload", readProgress);
+        paintChapterProgress();
         readProgress();
       })();
     </script>
