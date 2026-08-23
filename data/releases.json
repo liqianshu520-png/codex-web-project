@@ -1,5 +1,12 @@
 [
   {
+    "version": "v0005",
+    "releasedAt": "2026-08-23 23:06",
+    "latestChapter": "第003章 好漂亮的一个人",
+    "chapterCount": 3,
+    "summary": "Deploy from GitHub Runner to Chengdu with rsync while preserving messages and uploaded images"
+  },
+  {
     "version": "v0004",
     "releasedAt": "2026-08-23 22:56",
     "latestChapter": "第003章 好漂亮的一个人",

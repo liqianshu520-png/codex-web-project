@@ -18,6 +18,9 @@ jobs:
       DEPLOY_USER: ubuntu
 
     steps:
+      - name: Check out release
+        uses: actions/checkout@v4
+
       - name: Prepare SSH key
         shell: bash
         run: |
@@ -27,7 +30,19 @@ jobs:
           chmod 600 ~/.ssh/deploy_key
           ssh-keyscan -T 15 -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
-      - name: Deploy over SSH
+      - name: Sync release files
+        shell: bash
+        run: |
+          set -euo pipefail
+          rsync -az --delete \
+            --exclude '.git/' \
+            --exclude 'node_modules/' \
+            --exclude 'data/messages.json' \
+            --exclude 'public/uploads/yuan/' \
+            -e "ssh -o BatchMode=yes -o ConnectTimeout=15 -i $HOME/.ssh/deploy_key" \
+            ./ "$DEPLOY_USER@$DEPLOY_HOST:/home/ubuntu/excel/"
+
+      - name: Install and restart
         shell: bash
         run: |
           set -euo pipefail
@@ -38,8 +53,6 @@ jobs:
               . "$NVM_DIR/nvm.sh"
             fi
             cd /home/ubuntu/excel
-            git fetch origin main
-            git pull --ff-only origin main
             if [ -f package-lock.json ]; then
               npm ci --omit=dev
             else
