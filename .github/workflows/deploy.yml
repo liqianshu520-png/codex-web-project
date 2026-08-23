@@ -13,6 +13,9 @@ concurrency:
 jobs:
   deploy:
     runs-on: ubuntu-latest
+    env:
+      DEPLOY_HOST: 139.155.151.88
+      DEPLOY_USER: ubuntu
 
     steps:
       - name: Prepare SSH key
@@ -22,13 +25,13 @@ jobs:
           mkdir -p ~/.ssh
           printf '%s' '${{ secrets.DEPLOY_SSH_KEY }}' | base64 -d > ~/.ssh/deploy_key
           chmod 600 ~/.ssh/deploy_key
-          ssh-keyscan -H "${{ secrets.DEPLOY_HOST }}" >> ~/.ssh/known_hosts
+          ssh-keyscan -T 15 -H "$DEPLOY_HOST" >> ~/.ssh/known_hosts
 
       - name: Deploy over SSH
         shell: bash
         run: |
           set -euo pipefail
-          ssh -i ~/.ssh/deploy_key "${{ secrets.DEPLOY_USER }}@${{ secrets.DEPLOY_HOST }}" <<'EOF'
+          ssh -o BatchMode=yes -o ConnectTimeout=15 -i ~/.ssh/deploy_key "$DEPLOY_USER@$DEPLOY_HOST" <<'EOF'
             set -e
             export NVM_DIR="$HOME/.nvm"
             if [ -s "$NVM_DIR/nvm.sh" ]; then
@@ -43,8 +46,11 @@ jobs:
               npm install --omit=dev
             fi
             PM2_BIN="$(command -v pm2 || true)"
-            if [ -z "$PM2_BIN" ] && [ -x "$HOME/.nvm/versions/node/v20.20.2/bin/pm2" ]; then
-              PM2_BIN="$HOME/.nvm/versions/node/v20.20.2/bin/pm2"
+            if [ -z "$PM2_BIN" ] && command -v npm >/dev/null 2>&1; then
+              NPM_GLOBAL_PM2="$(npm prefix -g)/bin/pm2"
+              if [ -x "$NPM_GLOBAL_PM2" ]; then
+                PM2_BIN="$NPM_GLOBAL_PM2"
+              fi
             fi
             if [ -z "$PM2_BIN" ]; then
               echo "pm2 not found on remote host" >&2
