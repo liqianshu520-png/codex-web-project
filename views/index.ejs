@@ -5,12 +5,13 @@
     <meta name="viewport" content="width=device-width, initial-scale=1.0">
     <title><%= novel.title %> - 小说站</title>
     <meta name="description" content="<%= novel.description %>">
+    <script>document.documentElement.classList.add("motion-ready");</script>
     <link rel="stylesheet" href="/styles.css">
   </head>
   <body class="ink-home">
     <% const showChapters = novel.status !== "筹备中" && novel.latest !== "暂未上线" && novel.chapters.length > 0; %>
     <div class="site-shell">
-      <header class="topbar ink-topbar">
+      <header class="topbar ink-topbar" data-site-header>
         <a class="brand" href="/">
           <span class="brand-mark">渊</span>
           <span>渊 · 小说站</span>
@@ -25,20 +26,20 @@
       </header>
 
       <main>
-        <section id="novel" class="ink-hero">
-          <img class="ink-hero-bg" src="/assets/novels/ink/jianghu-panorama.png" alt="水墨山河">
+        <section id="novel" class="ink-hero" data-motion-hero>
+          <img class="ink-hero-bg" src="/assets/novels/ink/jianghu-panorama.png" alt="水墨山河" data-parallax-layer>
           <div class="ink-hero-shade"></div>
           <div class="ink-hero-copy">
-            <p class="eyebrow"><%= site.hero.eyebrow %></p>
-            <h1><%= novel.title %></h1>
-            <p class="tagline"><%= novel.tagline %></p>
-            <p class="intro-copy"><%= novel.description %></p>
-            <div class="novel-meta" aria-label="小说信息">
+            <p class="eyebrow" data-hero-reveal style="--reveal-order: 0"><%= site.hero.eyebrow %></p>
+            <h1 data-hero-reveal style="--reveal-order: 1"><%= novel.title %></h1>
+            <p class="tagline" data-hero-reveal style="--reveal-order: 2"><%= novel.tagline %></p>
+            <p class="intro-copy" data-hero-reveal style="--reveal-order: 3"><%= novel.description %></p>
+            <div class="novel-meta" aria-label="小说信息" data-hero-reveal style="--reveal-order: 4">
               <span><%= novel.genre %></span>
               <span><%= novel.status %></span>
               <span><%= novel.latest %></span>
             </div>
-            <div class="hero-actions">
+            <div class="hero-actions" data-hero-reveal style="--reveal-order: 5">
               <% if (showChapters) { %>
                 <a class="button primary" href="<%= novel.firstChapterUrl %>">开始阅读</a>
                 <a class="button secondary" href="#chapter-list">查看目录</a>
@@ -50,21 +51,21 @@
           </div>
         </section>
 
-        <section id="mood" class="ink-section mood-section">
+        <section id="mood" class="ink-section mood-section" data-motion-section>
           <div class="section-head">
             <p class="kicker">Ink Prelude</p>
             <h2>山水已开，故事仍有雾气</h2>
             <p>正文重新上架后，江湖的气息先从这里铺开：远山、竹影、舟子、纸上未干的墨。读者进门，先看见这口气，再翻进成都府的雨。</p>
           </div>
           <div class="mood-grid">
-            <article class="mood-card mood-card-wide">
+            <article class="mood-card mood-card-wide" data-motion-card>
               <img src="/assets/novels/ink/mist-river-wide.png" alt="烟雨江河">
               <div>
                 <span>江河</span>
                 <strong>一叶入水，万山无声</strong>
               </div>
             </article>
-            <article class="mood-card">
+            <article class="mood-card" data-motion-card>
               <img src="/assets/novels/ink/river-valley.png" alt="山谷水墨">
               <div>
                 <span>山谷</span>
@@ -74,7 +75,7 @@
           </div>
         </section>
 
-        <section id="characters" class="ink-section character-section">
+        <section id="characters" class="ink-section character-section" data-motion-section>
           <div class="section-head">
             <p class="kicker">Figures</p>
             <h2>人物照影</h2>
@@ -82,21 +83,21 @@
           </div>
 
           <div class="character-grid">
-            <article class="character-card tall">
+            <article class="character-card tall" data-motion-card>
               <img src="/assets/novels/ink/woman-writing.png" alt="执笔女子">
               <div class="character-caption">
                 <span>案前</span>
                 <strong>灯下未落的一笔</strong>
               </div>
             </article>
-            <article class="character-card">
+            <article class="character-card" data-motion-card>
               <img src="/assets/novels/ink/woman-bamboo.png" alt="竹影女子">
               <div class="character-caption">
                 <span>竹下</span>
                 <strong>绿竹无尘，宁静致远</strong>
               </div>
             </article>
-            <article class="character-card">
+            <article class="character-card" data-motion-card>
               <img src="/assets/novels/ink/woman-portrait.png" alt="水墨人物">
               <div class="character-caption">
                 <span>风月</span>
@@ -106,7 +107,7 @@
           </div>
         </section>
 
-        <section id="gallery" class="ink-section gallery-section">
+        <section id="gallery" class="ink-section gallery-section" data-motion-section>
           <div class="section-head">
             <p class="kicker">Novel Gallery</p>
             <h2>小说图片区</h2>
@@ -152,7 +153,7 @@
               <% } %>
 
               <% gallery.forEach((image) => { %>
-                <article class="gallery-card">
+                <article class="gallery-card" data-motion-card>
                   <a href="<%= image.url %>" target="_blank" rel="noreferrer">
                     <img src="<%= image.url %>" alt="<%= image.name %>">
                   </a>
@@ -166,7 +167,7 @@
           </div>
         </section>
 
-        <section id="chapter-list" class="ink-section chapter-panel">
+        <section id="chapter-list" class="ink-section chapter-panel" data-motion-section>
           <div class="section-head">
             <p class="kicker">Novel Index</p>
             <h2>《<%= novel.title %>》目录</h2>
@@ -180,7 +181,7 @@
           <% if (showChapters) { %>
             <div class="chapter-grid">
               <% novel.chapters.forEach((chapter) => { %>
-                <a class="chapter-card" href="<%= chapter.url %>">
+                <a class="chapter-card" href="<%= chapter.url %>" data-motion-card data-page-transition>
                   <span>第 <%= chapter.index %> 章</span>
                   <strong><%= chapter.title.replace(/^第\d+章\s*/, "") %></strong>
                 </a>
@@ -194,7 +195,7 @@
           <% } %>
         </section>
 
-        <section id="contact" class="ink-section contact-section">
+        <section id="contact" class="ink-section contact-section" data-motion-section>
           <div class="section-head">
             <p class="kicker">Message</p>
             <h2>给我留言</h2>
@@ -223,5 +224,7 @@
         </section>
       </main>
     </div>
+    <div class="site-scroll-progress" aria-hidden="true"><span data-site-progress></span></div>
+    <script src="/motion.js" defer></script>
   </body>
 </html>

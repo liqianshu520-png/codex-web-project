@@ -1,7 +1,16 @@
-{
-  "version": "v0001",
-  "releasedAt": "2026-05-17 23:44",
-  "latestChapter": "第003章 好漂亮的一个人",
-  "chapterCount": 3,
-  "summary": "Update published novel chapters 1-3 from new manuscript source"
-}
+[
+  {
+    "version": "v0002",
+    "releasedAt": "2026-08-23 22:41",
+    "latestChapter": "第003章 好漂亮的一个人",
+    "chapterCount": 3,
+    "summary": "Add cinematic wuxia motion and compact the mobile reader toolbar"
+  },
+  {
+    "version": "v0001",
+    "releasedAt": "2026-05-17 23:44",
+    "latestChapter": "第003章 好漂亮的一个人",
+    "chapterCount": 3,
+    "summary": "Update published novel chapters 1-3 from new manuscript source"
+  }
+]
